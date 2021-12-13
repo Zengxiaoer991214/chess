@@ -1,0 +1,6 @@
+project:
+  name: 中国象棋v1.0
+
+config:
+  music:
+    back: [bgm.mp3, bg.mp3, 507737.mp3, 555070.mp3, 559400.mp3, 841860.mp3]

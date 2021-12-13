@@ -1,6 +1,6 @@
 package com.qianfeng.java2112.lilin.chess.chess;
 
-import lombok.ToString;
+
 import util.Constant;
 import util.Util;
 
@@ -14,7 +14,6 @@ import java.awt.*;
  * @author: Lilin
  * @since JDK 1.8
  */
-@ToString
 public abstract class Chess {
     private String name;
     private boolean camp;

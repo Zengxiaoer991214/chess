@@ -14,16 +14,18 @@ import java.io.InputStream;
  */
 public class MusicThread implements Runnable {
     Player player = null;
+    String music;
+    public MusicThread(String music){
+        this.music = music;
+    }
     /**
      *
      * @params []
      * @date 2021/12/6 19:09
      */
-    @Override
-    public void run() {
-        InputStream is = MusicThread.class.getClassLoader().getResourceAsStream(Constant.BG_MUSIC);
+    public void myPlay(){
+        InputStream is = MusicThread.class.getClassLoader().getResourceAsStream(music);
         try {
-            assert is != null;
             player = new Player(is);
             do {//循环播放
                 player.play();
@@ -31,6 +33,10 @@ public class MusicThread implements Runnable {
         } catch (JavaLayerException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void run() {
+        myPlay();
     }
 
     public void stop() {

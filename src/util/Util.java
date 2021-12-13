@@ -1,6 +1,5 @@
 package util;
 
-import lombok.Setter;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -8,6 +7,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * ClassName: Util
@@ -17,8 +18,9 @@ import java.io.InputStream;
  * @author: Lilin
  * @since JDK 1.8
  */
-@Setter
+
 public class Util {
+    public static final ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
 
     public static Image getImage(String path){
         Image image = null;
@@ -47,8 +49,8 @@ public class Util {
     }
 
     public static void main(String[] args) {
-        System.out.println(getImage("bg.jpg"));
-        playSound("eat.wav");
+//        System.out.println(getImage("bg.jpg"));
+        playSound("select.wav");
 
     }
 }

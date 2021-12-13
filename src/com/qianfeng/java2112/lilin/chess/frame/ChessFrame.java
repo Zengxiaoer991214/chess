@@ -28,39 +28,15 @@ public class ChessFrame extends JFrame {
         this.setLocationRelativeTo(null);
         //设置菜单
         JMenuBar bar = new JMenuBar();
-        JMenu menu = new JMenu("背景音乐");
-        JMenu menu1 = new JMenu("游戏控制");
-        //设置菜单项
-        JMenuItem item1 = new JMenuItem("播放");
-        //点击播放--绑定事件
-        item1.addActionListener(e -> {
-            //启动线程来播放背景音乐
-            if(mt==null) {
-                mt = new MusicThread();
-                new Thread(mt).start();
-            }
-        });
-        //停止音乐
-        JMenuItem item2 = new JMenuItem("停止");
-        //点击停止--绑定事件
-        item2.addActionListener(e -> {
-            //启动线程来播放背景音乐
-            if(mt!=null) {
-                mt.stop();
-                mt = null;
-            }
-        });
-        menu.add(item1);
-        menu.add(item2);
-        bar.add(menu);
-        bar.add(menu1);
-        this.setJMenuBar(bar);
+        JMenu menu1 = new MusicMenu().music;
+        JMenu menu2 = new JMenu("游戏控制");
 
+        bar.add(menu1);
+        bar.add(menu2);
+        this.setJMenuBar(bar);
     }
 
     public void run() {
-        // 设置标题
-
         init();
         ChessPanel chessPanel = new ChessPanel();
         this.add(chessPanel);

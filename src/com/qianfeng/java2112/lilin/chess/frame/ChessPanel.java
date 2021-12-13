@@ -25,7 +25,10 @@ public class ChessPanel extends Panel {
      * 代表谁是当前执棋人 红方true/黑方false
      */
     private boolean whoseTurn = true;
-    private Graphics g;
+    /**
+     * 代表谁是winner 红方1/黑方-1
+     */
+    private int winner=0;
 
     ChessPanel(){
         initAllChess();
@@ -113,6 +116,9 @@ public class ChessPanel extends Panel {
                 if (checkedChess!=null&&currentChess!=null){
                     // 当前棋子和上个棋子为同一方的棋子
                     if (checkedChess.getCamp()==currentChess.getCamp()){
+                        Util.threadPool.submit(()->{
+                            Util.playSound(Constant.MUSIC_SELECT);
+                        });
                         System.out.println("换棋子");
                         currentChess = checkedChess;
                     }
@@ -120,13 +126,21 @@ public class ChessPanel extends Panel {
                     else {
                         System.out.println("吃棋子");
                         if (currentChess.run(rowX, colY, allChess)){
+                            Util.threadPool.submit(()-> Util.playSound(Constant.MUSIC_EAT));
                             System.out.println("可以吃");
+                            if (Constant.BOOS_BLACK.equals(checkedChess.getName())){
+                                winner = 1;
+                            }
+                            if (Constant.BOOS_RED.equals(checkedChess.getName())){
+                                winner = -1;
+                            }
                             System.out.println( allChess[currentChess.getArrayX()][currentChess.getArrayY()]);
                             allChess[currentChess.getArrayX()][currentChess.getArrayY()]=null;
                             currentChess.setPoint(rowX, colY);
                             allChess[rowX][colY] = currentChess;
                             currentChess=null;
                             whoseTurn=!whoseTurn;
+
                         }
                         else {
                             System.out.println("不可以吃");
@@ -140,11 +154,16 @@ public class ChessPanel extends Panel {
                     return;
                 }
                 // 当前棋子不空，上个棋子为空
-                else if(checkedChess!=null&&currentChess == null){
+//                else if(checkedChess!=null&&currentChess == null){
+                else if(checkedChess != null){
                     System.out.println("首次选子");
                     if (checkedChess.getCamp()==whoseTurn){
+                        Util.threadPool.submit(()->{
+                            Util.playSound(Constant.MUSIC_SELECT);
+                        });
                         System.out.println("正确选子");
                         currentChess = checkedChess;
+
                     }else {
                         System.out.println("选了对方的子");
                         return;
@@ -152,28 +171,28 @@ public class ChessPanel extends Panel {
                 } else {
                     System.out.println("走棋");
                     if (currentChess.run(rowX, colY, allChess)){
+                        Util.threadPool.submit(()->{
+                            Util.playSound(Constant.MUSIC_SELECT);
+                        });
                         allChess[currentChess.getArrayX()][currentChess.getArrayY()]=null;
                         currentChess.setPoint(rowX, colY);
                         allChess[rowX][colY] = currentChess;
                         currentChess=null;
                         whoseTurn=!whoseTurn;
+
                     }else {
                         return;
                     }
                 }
-
                 repaint();
             }
 
         });
-
     }
-
 
     @Override
     public void paint(Graphics g) {
         //先清空棋盘
-        this.g = g;
         g.clearRect(0, 0, Constant.WIDTH, Constant.HEIGHT);
         //先画一个棋盘背景
         g.drawImage(Util.getImage(Constant.IMAGE_BACKGROUND), 0, 0, null);
@@ -188,6 +207,17 @@ public class ChessPanel extends Panel {
         }
         if(currentChess!=null) {
             currentChess.drawBorder(g);
+        }
+        if(winner==1) {
+            g.setColor(Color.red);
+            g.setFont(new Font("黑体",Font.BOLD,50));
+            g.drawString("红方胜", 200, 300);
+        }
+
+        if(winner==-1) {
+            g.setColor(Color.black);
+            g.setFont(new Font("黑体",Font.BOLD,50));
+            g.drawString("黑方胜", 200, 300);
         }
     }
 }
